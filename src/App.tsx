@@ -280,10 +280,9 @@ function App() {
       />
       <div>Over:</div>
       <div className='overflow-x-auto'>
-        <ul className={'steps'}>
-          
-          {over.balls.map((ball) => (
-            <li className='step'>{ball.ball}</li>
+        <ul className={'steps'}>          
+          {over.balls.map((ball, ballIndex) => (
+            <li key={ballIndex} className='step'>{ball.ball}</li>
           ))}
         </ul>
       </div>
@@ -312,7 +311,7 @@ function App() {
 
       <div>
         <div>
-          Scoresheet: {displayScore()} for {getWicketCount()} after {innings.overs.length + 1} overs
+          Scoresheet: {displayScore()} for {getWicketCount()} after {innings.overs.length} overs
         </div>
         <ul>
           <li>{batsman1} - {getBatsmenScore(batsman1)}</li>

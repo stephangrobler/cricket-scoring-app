@@ -1,9 +1,12 @@
 import * as React from 'react';
+import { useState } from 'react';
 
 // @ts-ignore
 const BattersAndBowler = ({ bowler, setBowler, batsman1, setBatsman1, facing, handleFacing, batsman2, setBatsman2, }) => {
   const FIRST_BATSMAN = 1;
   const SECOND_BATSMAN = 2;
+
+  const [collapseOpen, setCollapseOpen] = useState(false);
 
   const handleBatsmanChange = (batsman: string, number: number) => {
     let store = { batsman1, batsman2, facing };
@@ -31,9 +34,14 @@ const BattersAndBowler = ({ bowler, setBowler, batsman1, setBatsman1, facing, ha
     return facing === facingBatsman ? `${classes} btn-accent` : classes;
   };
 
+  const openClose = () => {
+    const baseClass= "collapse collapse-arrow";
+    return collapseOpen ? `${baseClass} collapse-open`: baseClass;
+  }
+
   return (
     <div>
-      <div tabIndex={0} className="collapse collapse-arrow collapse-open">
+      <div className={openClose()} onClick={() => setCollapseOpen(!collapseOpen)}>
         <div className="collapse-title">
           Set Bowler and Batsman
         </div>
