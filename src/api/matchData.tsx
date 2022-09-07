@@ -1,13 +1,9 @@
 import { nanoid } from 'nanoid';
-import { Over, Ball } from '../interfaces/Match';
+import { Over, Ball, Match, Innings } from '../interfaces/Match';
 // @ts-ignore
 const createInnings = (matchId) => {
-  const inningData = {
+  const inningData: Innings = {
     id: nanoid(),
-    fielding: '',
-    batting: '',
-    currentBatsman1: '',
-    currentBatsman2: '',
     score: 0,
     wickets: 0,
     overs: [],
@@ -17,56 +13,30 @@ const createInnings = (matchId) => {
       wides: 0,
       byes: 0,
       legbyes: 0,
-    },
-    bowlers: [
-      {
-        id: nanoid(),
-        playerId: '',
-        name: '',
-        overs: 0,
-        wickets: 0,
-        runs: 0,
-        extras: {
-          noballs: 0,
-          wides: 0,
-        },
-      },
-    ],
-    batsmen: [
-      {
-        playerId: '',
-        name: '',
-        runs: 0,
-        fours: 0,
-        sixes: 0,
-        out: '',
-      },
-    ],
+    }
   };
   persistInnings(inningData);
   return inningData;
 };
 
-// @ts-ignore
-const createOver = (inningsId) => {
-  let over = {
+const createOver = () => {
+  let over: Over = {
     bowler: '',
     balls: []
-  }
-
+  };
   return over;
 }
 
-// @ts-ignore
-const persistOver = (over) => {
+
+const persistOver = (over: Over) => {
   localStorage.setItem(`currentOver`, JSON.stringify(over));
 }
 
-const getCurrentOver = () => {
+const getCurrentOver = (): Over => {
   const storedOver = localStorage.getItem('currentOver');
   let over: Over;
   if (!storedOver) {
-    over = createOver('tent');
+    over = createOver();
   } else {
     over = JSON.parse(storedOver);
   }
@@ -74,7 +44,7 @@ const getCurrentOver = () => {
 }
 
 // @ts-ignore
-const getCurrentInnings = (matchId) => {
+const getCurrentInnings = (matchId): Innings => {
   const storedInnings = localStorage.getItem('currentInnings');
   let innings;
   if (!storedInnings) {
@@ -92,39 +62,11 @@ const persistInnings = (innings) => {
 
 
 const createMatch = () => {
-  const matchData = {
+  const matchData: Match = {
     id: nanoid(),
     vs: '',
     overs: 20,
-    innings: [],
-    teams: {
-      red: {
-        name: '',
-        players: [
-          {
-            id: nanoid(),
-            name: '',
-            stats: {
-              bowling: 0,
-              batting: 0,
-            },
-          },
-        ],
-      },
-      blue: {
-        name: '',
-        players: [
-          {
-            id: nanoid(),
-            name: '',
-            stats: {
-              bowling: 0,
-              batting: 0,
-            },
-          },
-        ],
-      },
-    },
+    innings: {}    
   };
   persistMatch(matchData);
   return matchData;
@@ -136,7 +78,7 @@ const persistMatch = (match) => {
   localStorage.setItem(match.id, JSON.stringify(match));
 };
 
-const getCurrentMatch = () => {
+const getCurrentMatch = ():Match => {
   let match;
   const currentMatchId = localStorage.getItem('currentMatch');
   if (!currentMatchId) {

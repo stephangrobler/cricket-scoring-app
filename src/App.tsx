@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { getCurrentInnings, getCurrentMatch, getCurrentOver, persistInnings, persistMatch, persistOver } from './api/matchData';
@@ -7,6 +7,7 @@ import FairDelivery from './components/FairDelivery';
 import ExtrasComponent from './components/ExtrasComponent';
 import WicketComponent from './components/WicketComponent';
 import { Over } from './interfaces/Match';
+import { Supabase } from './api/supabase';
 
 // function App() {
 //   return (
@@ -35,14 +36,35 @@ function App() {
   const inningData = getCurrentInnings(matchData.id);
   const overData = getCurrentOver();
 
+  const getCurrentBatsman = () => {
+    const currentBatsman = localStorage.getItem('currentBatsmen');
+    if (!currentBatsman) {
+      return {batsman1: '', batsman2: '', facinc: 1};
+    } else {
+      return JSON.parse(currentBatsman);
+    }
+  }
+ 
+  const getCurrentBowler = () => {
+    const currentBowler = localStorage.getItem('currentBowler');
+    if (!currentBowler) {
+      return '';
+    } else {
+      return JSON.parse(currentBowler);
+    }
+  }
+
+  const batsmen = getCurrentBatsman();
+  const currentBowler = getCurrentBowler();
+
   const [match, setMatch] = useState(matchData);
   const [innings, setInnings] = useState(inningData);
   const [over, setOver] = useState(overData);
-  const [bowler, setBowler] = useState('');
-  const [batsman1, setBatsman1] = useState('');
-  const [batsman2, setBatsman2] = useState('');
+  const [bowler, setBowler] = useState(currentBowler);
+  const [batsman1, setBatsman1] = useState(batsmen.batsman1);
+  const [batsman2, setBatsman2] = useState(batsmen.batsman2);
   const [batsman, setBatsman] = useState('');
-  const [facing, setFacing] = useState(1);
+  const [facing, setFacing] = useState(batsmen.facing);
   const [multiplier, setMultiplier] = useState(1);
   const [extra, setExtra] = useState('');
 
@@ -58,6 +80,21 @@ function App() {
     symbol: '',
     multiplier: 1,
   };
+
+  useEffect(() => {
+    const base = new Supabase();
+    const fetchPlayers = async () => {
+      try {
+        const players = await base.getPlayers();
+        
+        console.log(players);
+      } catch (err) {
+
+      }
+    }
+
+    (async () => await fetchPlayers())();
+  }, []);
   
   // @ts-ignore
   const handleBall = (ball, extraScore) => {
@@ -140,10 +177,11 @@ function App() {
   };
 
   const handleEndOver = () => {
-    const newInnings = { ...innings, overs: [...innings.overs, over] };
+    const inningData = { ...innings, overs: [...innings.overs, over] };
+    
 
-    setInnings(newInnings);
-    persistInnings(newInnings);
+    setInnings(inningData);
+    persistInnings(inningData);
 
     setOver({ bowler: '', balls: [] });
     persistOver({ bowler: '', balls: [] });
@@ -152,15 +190,29 @@ function App() {
   };
 
   const handleEndMatch = () => {
-    setInnings([]);
-    setMatch([]);
-    persistMatch(match);
+    handleEndInnings();
+
+    localStorage.removeItem('currentMatch');
+    localStorage.removeItem('currentInnings');
+    
+    const newMatch = getCurrentMatch();
+    const newInnings = getCurrentInnings(newMatch.id);
+    setMatch(newMatch);
+    setInnings(newInnings);
   };
 
   const handleEndInnings = () => {
-    setInnings([]);
-    setMatch([...match, innings]);
-    persistMatch(match);
+    const matchData = {...match, innings: {...match.innings, [innings.id]: innings}};
+    setMatch(matchData);
+    persistMatch(matchData);
+    localStorage.removeItem('currentInnings');
+    localStorage.removeItem('currentOver');
+    localStorage.removeItem('currentBowler');
+    localStorage.removeItem('currentBatsmen');
+
+    const inningData = getCurrentInnings(match.id);
+    persistInnings(inningData);
+    setInnings(inningData);
   };
 
   // @ts-ignore
@@ -204,6 +256,7 @@ function App() {
         <button className="btn btn-primary m-1" onClick={handleEndInnings}>
           New Innings
         </button>
+
       </header>
       <BattersAndBowler
         bowler={bowler}
@@ -249,7 +302,7 @@ function App() {
 
       <div>
         <div>
-          Scoresheet: {displayScore()} for WICKETS after {match.length} overs
+          Scoresheet: {displayScore()} for WICKETS after {innings.overs.length + 1} overs
         </div>
         <ul>
           <li>{batsman1} - {getBatsmenScore(batsman1)}</li>
@@ -264,11 +317,11 @@ function App() {
           {/* <code>{JSON.stringify(innings)}</code> */}
           <ul>
             {innings.overs.map((over: Over, index: number) => (
-              <li>
+              <li key={index}>
                 <ul className={'over-display'}>
                   <li className='badge badge-accent'>{index + 1}</li>
-                  {over.balls.map((ball) => (
-                    <li className='badge'>{ball.ball}</li>
+                  {over.balls.map((ball, ballIndex) => (
+                    <li className='badge' key={ballIndex}>{ball.ball}</li>
                   ))}
                 </ul>
               </li>
