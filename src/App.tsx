@@ -216,11 +216,11 @@ function App() {
         facing={facing}
       />
       <div>Over:</div>
-      <div>
-        <ul className={'over-display'}>
+      <div className='overflow-x-auto'>
+        <ul className={'steps'}>
           
           {over.balls.map((ball) => (
-            <li className='badge'>{ball.ball}</li>
+            <li className='step'>{ball.ball}</li>
           ))}
         </ul>
       </div>
