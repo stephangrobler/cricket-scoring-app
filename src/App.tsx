@@ -236,7 +236,7 @@ function App() {
     return score;
   };
 
-  const displayScore = () => {
+  const displayScore = (): number => {
     // @ts-ignore
     const score = innings.overs.reduce((acc, cur) => {
       // @ts-ignore
@@ -246,6 +246,16 @@ function App() {
     }, 0);
     return score;
   };
+
+  const getWicketCount = (): number => {
+    return innings.overs.reduce((acc, cur) => {
+      // @ts-ignore
+      return (acc += cur.balls.reduce((ballAcc, ballCur) => {
+        return ballAcc += ballCur.wicket !== '' ? 1 : 0;
+      }, 0));
+    }, 0);
+    
+  }
 
   return (
     <div className="container m-auto px-1">
@@ -302,7 +312,7 @@ function App() {
 
       <div>
         <div>
-          Scoresheet: {displayScore()} for WICKETS after {innings.overs.length + 1} overs
+          Scoresheet: {displayScore()} for {getWicketCount()} after {innings.overs.length + 1} overs
         </div>
         <ul>
           <li>{batsman1} - {getBatsmenScore(batsman1)}</li>

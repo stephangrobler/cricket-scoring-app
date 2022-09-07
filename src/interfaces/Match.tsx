@@ -27,7 +27,8 @@ export interface Over {
 }
 
 export interface Ball {
-  ball: string,
+  ball: string;
+  wicket: string;
   score: number;
   extras: number;
   bowler: string;
