@@ -29,6 +29,7 @@ export interface Over {
 export interface Ball {
   ball: string,
   score: number;
+  extras: number;
   bowler: string;
   batsman: string;
   batsmanScore: number;

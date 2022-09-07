@@ -241,7 +241,7 @@ function App() {
     const score = innings.overs.reduce((acc, cur) => {
       // @ts-ignore
       return (acc += cur.balls.reduce((overAcc, overCur) => {
-        return (overAcc += overCur.score);
+        return (overAcc += overCur.score + overCur.extras);
       }, 0));
     }, 0);
     return score;
@@ -308,30 +308,7 @@ function App() {
           <li>{batsman1} - {getBatsmenScore(batsman1)}</li>
           <li>{batsman2} - {getBatsmenScore(batsman2)}</li>
         </ul>
-
-        {/* <div>
-          <code>{JSON.stringify(over)}</code>
-        </div> */}
-        <div>
-          Innings: <br />
-          {/* <code>{JSON.stringify(innings)}</code> */}
-          <ul>
-            {innings.overs.map((over: Over, index: number) => (
-              <li key={index}>
-                <ul className={'over-display'}>
-                  <li className='badge badge-accent'>{index + 1}</li>
-                  {over.balls.map((ball, ballIndex) => (
-                    <li className='badge' key={ballIndex}>{ball.ball}</li>
-                  ))}
-                </ul>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          Match: <br />
-          <code>{JSON.stringify(match)}</code>
-        </div>
+        
       </div>
     </div>
   );
