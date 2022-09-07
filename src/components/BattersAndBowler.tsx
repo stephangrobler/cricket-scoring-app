@@ -34,14 +34,10 @@ const BattersAndBowler = ({ bowler, setBowler, batsman1, setBatsman1, facing, ha
     return facing === facingBatsman ? `${classes} btn-accent` : classes;
   };
 
-  const openClose = () => {
-    const baseClass= "collapse collapse-arrow";
-    return collapseOpen ? `${baseClass} collapse-open`: baseClass;
-  }
-
   return (
     <div>
-      <div className={openClose()} onClick={() => setCollapseOpen(!collapseOpen)}>
+      <div className="collapse collapse-arrow border border-base-300 rounded-box mb-2">
+        <input type="checkbox" />
         <div className="collapse-title">
           Set Bowler and Batsman
         </div>
@@ -104,9 +100,13 @@ const BattersAndBowler = ({ bowler, setBowler, batsman1, setBatsman1, facing, ha
       </div>
 
       <div>
-        <div className="badge">{bowler}</div>
-        <button className='btn btn-primary'>{batsman1}</button>
-        <button className='btn btn-primary'>{batsman2}</button>
+        <div className="badge m-2">{bowler}</div>
+        <button
+          className={getClass(FIRST_BATSMAN)}
+          onClick={() => handleFacing(FIRST_BATSMAN)}>{batsman1}</button>
+          &nbsp;
+        <button className={getClass(SECOND_BATSMAN)}
+          onClick={() => handleFacing(SECOND_BATSMAN)}>{batsman2}</button>
       </div>
     </div>
   );
