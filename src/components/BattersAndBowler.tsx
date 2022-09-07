@@ -2,20 +2,24 @@ import * as React from 'react';
 import { useState } from 'react';
 
 // @ts-ignore
-const BattersAndBowler = ({ bowler, setBowler, batsman1, setBatsman1, facing, handleFacing, batsman2, setBatsman2, }) => {
+const BattersAndBowler = ({ bowler, setBowler, batsman1, setBatsman1, setBatsman, facing, handleFacing, batsman2, setBatsman2, }) => {
   const FIRST_BATSMAN = 1;
   const SECOND_BATSMAN = 2;
-
-  const [collapseOpen, setCollapseOpen] = useState(false);
 
   const handleBatsmanChange = (batsman: string, number: number) => {
     let store = { batsman1, batsman2, facing };
     if (number === FIRST_BATSMAN) {
       setBatsman1(batsman);
       store = { ...store, batsman1: batsman };
+      if (facing === FIRST_BATSMAN) {
+        setBatsman(batsman);
+      }
     } else {
       setBatsman2(batsman);
       store = { ...store, batsman2: batsman };
+      if (facing === SECOND_BATSMAN) {
+        setBatsman(batsman);
+      }
     }
     persistBatsmen(store);
   };

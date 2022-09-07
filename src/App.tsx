@@ -67,6 +67,7 @@ function App() {
   const [facing, setFacing] = useState(batsmen.facing);
   const [multiplier, setMultiplier] = useState(1);
   const [extra, setExtra] = useState('');
+  const [error, setError] = useState('');
 
   const ballTemplate = {
     bowler: '',
@@ -98,6 +99,17 @@ function App() {
   
   // @ts-ignore
   const handleBall = (ball, extraScore) => {
+    if (!ball) {
+      setError('No ball type set.');
+      return;
+    }
+
+    if (!bowler || !batsman) {
+      setError('No bowler or batsman set. Please ensure both is set correctly.');
+      return;
+    }
+
+    
     const newBall = { ...ballTemplate, ball, bowler, batsman, multiplier };
     switch (ball) {
       case 'DOT':
@@ -277,6 +289,7 @@ function App() {
         batsman2={batsman2}
         setBatsman2={setBatsman2}
         facing={facing}
+        setBatsman={setBatsman}
       />
       <div>Over:</div>
       <div className='overflow-x-auto'>
@@ -286,6 +299,12 @@ function App() {
           ))}
         </ul>
       </div>
+      {error != '' && <div className="alert alert-error shadow-lg" onClick={() => setError('')}>
+        <div>
+          <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+          <span>Error! {error}</span>
+        </div>
+      </div>}
       <FairDelivery
         multiplier={multiplier}
         setMultiplier={setMultiplier}
