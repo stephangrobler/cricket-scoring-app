@@ -102,16 +102,6 @@ const BattersAndBowler = ({ bowler, setBowler, batsman1, setBatsman1, setBatsman
           </div>
         </div>
       </div>
-
-      <div>
-        <div className="badge m-2">{bowler}</div>
-        <button
-          className={getClass(FIRST_BATSMAN)}
-          onClick={() => handleFacing(FIRST_BATSMAN)}>{batsman1}</button>
-          &nbsp;
-        <button className={getClass(SECOND_BATSMAN)}
-          onClick={() => handleFacing(SECOND_BATSMAN)}>{batsman2}</button>
-      </div>
     </div>
   );
 };

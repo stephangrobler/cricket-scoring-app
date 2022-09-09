@@ -4,7 +4,7 @@ import * as React from 'react';
 const ExtrasComponent = ({ extra, setExtra, handleBall }) => {
   // @ts-ignore
   const getClass = (extraType) => {
-    let classes = 'btn btn-primary m-1';
+    let classes = 'btn btn-primary btn-sm m-1';
     return extraType === extra ? `${classes} btn-accent` : classes;    
   };
 
@@ -44,65 +44,7 @@ const ExtrasComponent = ({ extra, setExtra, handleBall }) => {
         >
           LEG BYE
         </button>
-      </div>
-      <div className={extra !== '' ? 'select-runs' : undefined}>
-        <button
-          className="btn btn-secondary m-1"
-          onClick={() => {
-            handleBall(extra, 0);
-          }}
-        >
-          0
-        </button>
-        <button
-          className="btn btn-secondary m-1"
-          onClick={() => {
-            handleBall(extra, 1);
-          }}
-        >
-          1
-        </button>
-        <button
-          className="btn btn-secondary m-1"
-          onClick={() => {
-            handleBall(extra, 2);
-          }}
-        >
-          2
-        </button>
-        <button
-          className="btn btn-secondary m-1"
-          onClick={() => {
-            handleBall(extra, 3);
-          }}
-        >
-          3
-        </button>
-        <button
-          className="btn btn-secondary m-1"
-          onClick={() => {
-            handleBall(extra, 4);
-          }}
-        >
-          4
-        </button>
-        <button
-          className="btn btn-secondary m-1"
-          onClick={() => {
-            handleBall(extra, 5);
-          }}
-        >
-          5
-        </button>
-        <button
-          className="btn btn-secondary m-1"
-          onClick={() => {
-            handleBall(extra, 6);
-          }}
-        >
-          6
-        </button>
-      </div>
+      </div>      
     </div>
   );
 };

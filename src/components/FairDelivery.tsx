@@ -1,4 +1,3 @@
-import * as React from 'react';
 
 // @ts-ignore
 const FairDelivery = ({ multiplier, setMultiplier, handleBall}) => {
@@ -26,7 +25,7 @@ const FairDelivery = ({ multiplier, setMultiplier, handleBall}) => {
   </div>
   <div>
     <button
-      className="btn btn-primary m-1"
+      className="btn btn-primary btn-sm m-1"
       onClick={() => {
         handleBall('DOT', 0);
       }}
@@ -34,7 +33,7 @@ const FairDelivery = ({ multiplier, setMultiplier, handleBall}) => {
       DOT
     </button>
     <button
-      className="btn btn-primary m-1"
+      className="btn btn-primary btn-sm m-1"
       onClick={() => {
         handleBall('1', 0);
       }}
@@ -42,7 +41,7 @@ const FairDelivery = ({ multiplier, setMultiplier, handleBall}) => {
       1
     </button>
     <button
-      className="btn btn-primary m-1"
+      className="btn btn-primary btn-sm m-1"
       onClick={() => {
         handleBall('2', 0);
       }}
@@ -50,7 +49,7 @@ const FairDelivery = ({ multiplier, setMultiplier, handleBall}) => {
       2
     </button>
     <button
-      className="btn btn-primary m-1"
+      className="btn btn-primary btn-sm m-1"
       onClick={() => {
         handleBall('3', 0);
       }}
@@ -58,7 +57,7 @@ const FairDelivery = ({ multiplier, setMultiplier, handleBall}) => {
       3
     </button>
     <button
-      className="btn btn-primary m-1"
+      className="btn btn-primary btn-sm m-1"
       onClick={() => {
         handleBall('FOUR', 0);
       }}
@@ -67,7 +66,7 @@ const FairDelivery = ({ multiplier, setMultiplier, handleBall}) => {
     </button>
 
     <button
-      className="btn btn-primary m-1"
+      className="btn btn-primary btn-sm m-1"
       onClick={() => {
         handleBall('SIX', 0);
       }}
@@ -75,7 +74,7 @@ const FairDelivery = ({ multiplier, setMultiplier, handleBall}) => {
       SIX
     </button>
     <button
-      className="btn btn-primary m-1"
+      className="btn btn-primary btn-sm m-1"
       onClick={() => {
         handleBall('DUD', 0);
       }}
