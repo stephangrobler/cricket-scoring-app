@@ -35,6 +35,7 @@ export interface Ball {
   batsman: string;
   batsmanScore: number;
   bowlerScore: number;
+  symbol: string;
 }
 
 export interface Team { }

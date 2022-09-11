@@ -1,7 +1,7 @@
 
 // @ts-ignore
 const MatchComponent = ({team1, setTeam1, team2, setTeam2, handleEndMatch, handleEndInnings}) => {
-    return <div>
+    return <div className="p-2">
         <header className="my-2">
         <button className="btn btn-primary m-1" onClick={handleEndMatch}>
           New Match

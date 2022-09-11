@@ -89,7 +89,7 @@ function App() {
     };
 
   return (
-    <div className="container mx-auto">
+    <div className="container mx-auto h-screen">
       <div className="tabs tabs-boxed">
         <a className={activeTab === 'MatchSettings' ? "tab tab-active": "tab"} onClick={() => setActiveTab('MatchSettings')}>Match Settings</a> 
         <a className={activeTab === 'Scoring' ? "tab tab-active": "tab"} onClick={() => setActiveTab('Scoring')}>Scoring</a> 

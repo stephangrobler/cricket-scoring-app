@@ -27,7 +27,7 @@ const FairDelivery = ({ multiplier, setMultiplier, handleBall}) => {
     <button
       className="btn btn-primary btn-sm m-1"
       onClick={() => {
-        handleBall('DOT', 0);
+        handleBall(0);
       }}
     >
       DOT
@@ -35,7 +35,7 @@ const FairDelivery = ({ multiplier, setMultiplier, handleBall}) => {
     <button
       className="btn btn-primary btn-sm m-1"
       onClick={() => {
-        handleBall('1', 0);
+        handleBall(1);
       }}
     >
       1
@@ -43,7 +43,7 @@ const FairDelivery = ({ multiplier, setMultiplier, handleBall}) => {
     <button
       className="btn btn-primary btn-sm m-1"
       onClick={() => {
-        handleBall('2', 0);
+        handleBall(2);
       }}
     >
       2
@@ -51,7 +51,7 @@ const FairDelivery = ({ multiplier, setMultiplier, handleBall}) => {
     <button
       className="btn btn-primary btn-sm m-1"
       onClick={() => {
-        handleBall('3', 0);
+        handleBall(3);
       }}
     >
       3
@@ -59,7 +59,7 @@ const FairDelivery = ({ multiplier, setMultiplier, handleBall}) => {
     <button
       className="btn btn-primary btn-sm m-1"
       onClick={() => {
-        handleBall('FOUR', 0);
+        handleBall(4);
       }}
     >
       FOUR
@@ -68,7 +68,7 @@ const FairDelivery = ({ multiplier, setMultiplier, handleBall}) => {
     <button
       className="btn btn-primary btn-sm m-1"
       onClick={() => {
-        handleBall('SIX', 0);
+        handleBall(6);
       }}
     >
       SIX
@@ -76,7 +76,7 @@ const FairDelivery = ({ multiplier, setMultiplier, handleBall}) => {
     <button
       className="btn btn-primary btn-sm m-1"
       onClick={() => {
-        handleBall('DUD', 0);
+        handleBall(0);
       }}
     >
       DUD BALL

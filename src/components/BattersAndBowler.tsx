@@ -10,16 +10,10 @@ const BattersAndBowler = ({ bowler, setBowler, batsman1, setBatsman1, setBatsman
     let store = { batsman1, batsman2, facing };
     if (number === FIRST_BATSMAN) {
       setBatsman1(batsman);
-      store = { ...store, batsman1: batsman };
-      if (facing === FIRST_BATSMAN) {
-        setBatsman(batsman);
-      }
+      store = { ...store, batsman1: batsman };     
     } else {
       setBatsman2(batsman);
-      store = { ...store, batsman2: batsman };
-      if (facing === SECOND_BATSMAN) {
-        setBatsman(batsman);
-      }
+      store = { ...store, batsman2: batsman };      
     }
     persistBatsmen(store);
   };
@@ -69,13 +63,7 @@ const BattersAndBowler = ({ bowler, setBowler, batsman1, setBatsman1, setBatsman
                 value={batsman1}
                 className="input input-bordered  w-full max-w-xs"
                 onChange={(e) => handleBatsmanChange(e.target.value, FIRST_BATSMAN)}
-              />
-              <button
-                className={getClass(FIRST_BATSMAN)}
-                onClick={() => handleFacing(FIRST_BATSMAN)}
-              >
-                Facing
-              </button>
+              />              
             </div>
           </div>
           <div className="form-control">
@@ -91,13 +79,7 @@ const BattersAndBowler = ({ bowler, setBowler, batsman1, setBatsman1, setBatsman
                 onChange={(e) =>
                   handleBatsmanChange(e.target.value, SECOND_BATSMAN)
                 }
-              />
-              <button
-                className={getClass(SECOND_BATSMAN)}
-                onClick={() => handleFacing(SECOND_BATSMAN)}
-              >
-                Facing
-              </button>
+              />             
             </div>
           </div>
         </div>
