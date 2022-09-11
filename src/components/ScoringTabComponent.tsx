@@ -12,6 +12,9 @@ export interface PropsForScoring {
 
 const ScoringTabComponent = ({ match, setMatch, innings, setInnings }: PropsForScoring) => {
 
+    const FIRST_BATSMAN = 1;
+    const SECOND_BATSMAN = 2;
+
     const overData = getCurrentOver();
 
     const getCurrentBatsman = () => {
@@ -40,7 +43,7 @@ const ScoringTabComponent = ({ match, setMatch, innings, setInnings }: PropsForS
     const [batsman1, setBatsman1] = useState(batsmen.batsman1);
     const [batsman2, setBatsman2] = useState(batsmen.batsman2);
     const [batsman, setBatsman] = useState('');
-    const [facing, setFacing] = useState(batsmen.facing);
+    const [facing, setFacing] = useState(batsmen.facing ? batsmen.facing : FIRST_BATSMAN);
     const [multiplier, setMultiplier] = useState(1);
     const [extra, setExtra] = useState('');
     const [error, setError] = useState('');
@@ -57,85 +60,52 @@ const ScoringTabComponent = ({ match, setMatch, innings, setInnings }: PropsForS
         multiplier: 1,
     };
     // @ts-ignore
-    const handleBall = (ball, extraScore) => {
-        if (!ball) {
-            setError('No ball type set.');
-            return;
-        }
-
-        if (!bowler || !batsman) {
+    const handleBall = (runs, ballType = 'FAIR') => {
+        if (!bowler || !batsman1 || !batsman2 || !facing) {
             setError('No bowler or batsman set. Please ensure both is set correctly.');
             return;
         }
 
+        const batsman = facing === FIRST_BATSMAN ? batsman1 : batsman2;
 
-        const newBall = { ...ballTemplate, ball, bowler, batsman, multiplier };
-        switch (ball) {
-            case 'DOT':
-                newBall.score = 0;
-                break;
-            case '1':
-                newBall.score = 1 * multiplier;
+        ballType = extra !== '' ? extra : ballType;
+
+        const newBall = { ...ballTemplate, ball: ballType, bowler, batsman, multiplier };
+        switch (ballType) {
+            case 'FAIR':
+                newBall.score = runs * multiplier;
                 newBall.batsmanScore = newBall.score;
                 newBall.bowlerScore = newBall.score;
-                break;
-            case '2':
-                newBall.score = 2 * multiplier;
-                newBall.batsmanScore = newBall.score;
-                newBall.bowlerScore = newBall.score;
-                break;
-            case '3':
-                newBall.score = 3 * multiplier;
-                newBall.batsmanScore = newBall.score;
-                newBall.bowlerScore = newBall.score;
-                break;
-            case 'FOUR':
-                newBall.score = 4 * multiplier;
-                newBall.batsmanScore = newBall.score;
-                newBall.bowlerScore = newBall.score;
-                break;
-            case '5':
-                newBall.score = 5 * multiplier;
-                newBall.batsmanScore = newBall.score;
-                newBall.bowlerScore = newBall.score;
-                break;
-            case 'SIX':
-                newBall.score = 6 * multiplier;
-                newBall.batsmanScore = newBall.score;
-                newBall.bowlerScore = newBall.score;
+                newBall.symbol = `${runs}`;
                 break;
             case 'WIDE':
-                newBall.extras = 1 + extraScore;
+                newBall.extras = 1 + runs;
                 newBall.batsmanScore = 0;
-                newBall.bowlerScore = newBall.score;
+                newBall.bowlerScore = newBall.extras;
+                newBall.symbol = `${runs}WD`;
                 break;
             case 'NOBALL':
-                newBall.extras = 1 + extraScore;
+                newBall.extras = 1 + runs;
                 newBall.batsmanScore = 0;
-                newBall.bowlerScore = newBall.score;
+                newBall.bowlerScore = newBall.extras;
+                newBall.symbol = `${runs}NB`;
                 break;
             // should this be here?? byes should be extra, does it count against the bowler though?
             case 'BYE':
-                newBall.extras = 0 + extraScore;
+                newBall.extras = 0 + runs;
+                newBall.symbol = `${runs}B`;
                 break;
             case 'LEGBYE':
-                newBall.extras = 0 + extraScore;
+                newBall.extras = 0 + runs;
+                newBall.symbol = `${runs}LB`;
                 break;
             case 'CAUGHT':
-                newBall.score = 0;
-                newBall.wicket = 'CAUGHT';
-                break;
             case 'BOWLED':
-                newBall.score = 0;
-                newBall.wicket = 'CAUGHT';
-                break;
             case 'RUNOUT':
-                newBall.score = 0;
-                newBall.wicket = 'RUNOUT';
-                break;
             case 'STUMPED':
                 newBall.score = 0;
-                newBall.wicket = 'STUMPED';
+                newBall.wicket = ballType;
+                newBall.symbol = `W`;
                 break;
         }
 
@@ -143,13 +113,16 @@ const ScoringTabComponent = ({ match, setMatch, innings, setInnings }: PropsForS
         setOver({ ...over, balls });
         persistOver({ ...over, balls });
 
+        if (runs % 2 !== 0) {
+            setFacing(facing === FIRST_BATSMAN ? SECOND_BATSMAN : FIRST_BATSMAN);
+        }
+
         setExtra('');
         setMultiplier(1);
     };
 
     const handleEndOver = () => {
         const inningData = { ...innings, overs: [...innings.overs, over] };
-
 
         setInnings(inningData);
         persistInnings(inningData);
@@ -188,18 +161,31 @@ const ScoringTabComponent = ({ match, setMatch, innings, setInnings }: PropsForS
                 return (overAcc += overCur.score + overCur.extras);
             }, 0));
         }, 0);
-        return score;
+
+        const overScore = over.balls.reduce((overAcc, currBall) => {
+            return overAcc += currBall.score + currBall.extras;
+        }, 0);
+        return score + overScore;
     };
 
     const getWicketCount = (): number => {
-        return innings.overs.reduce((acc, cur) => {
+        const inningWickets = innings.overs.reduce((acc, cur) => {
             // @ts-ignore
             return (acc += cur.balls.reduce((ballAcc, ballCur) => {
                 return ballAcc += ballCur.wicket !== '' ? 1 : 0;
             }, 0));
         }, 0);
+        const overWickets = over.balls.reduce((ballAcc, ballCur) => {
+            return ballAcc += ballCur.wicket !== '' ? 1 : 0;
+        }, 0);
+
+        return inningWickets + overWickets;
     }
 
+    const swapBatsman = () => {
+        const swapped = facing !== FIRST_BATSMAN ? FIRST_BATSMAN : SECOND_BATSMAN;
+        setFacing(swapped);
+    }
 
     return <div className="scoring-tab p-1">
 
@@ -215,11 +201,11 @@ const ScoringTabComponent = ({ match, setMatch, innings, setInnings }: PropsForS
             setBatsman={setBatsman}
         />
 
-        <div className="border rounded-box p-2 mb-2">
+        <div className="border border-base-300 rounded-box p-2 mb-2">
             {displayScore()}-{getWicketCount()} | {innings.overs.length} overs
         </div>
 
-        <div className="border rounded-box p-2 mb-2">
+        <div className="border border-base-300 rounded-box p-2 mb-2">
 
             <ul>
                 <li>{batsman1} - {getBatsmenScore(batsman1)} {facing === 1 ? <span>*</span> : null} </li>
@@ -227,23 +213,25 @@ const ScoringTabComponent = ({ match, setMatch, innings, setInnings }: PropsForS
             </ul>
         </div>
 
-        <div className="border rounded-box p-2">
+        <div className="border border-base-300 rounded-box p-2 mb-2">
 
             <div>Over:</div>
             <div className='overflow-x-auto'>
                 <ul className={'steps'}>
                     {over.balls.map((ball, ballIndex) => (
-                        <li key={ballIndex} className='step'>{ball.ball}</li>
+                        <li key={ballIndex} className='step'>{ball.symbol}</li>
                     ))}
                 </ul>
             </div>
         </div>
-        {error != '' && <div className="alert alert-error shadow-lg" onClick={() => setError('')}>
+        {error !== '' && <div className="alert alert-error shadow-lg m-2" onClick={() => setError('')}>
             <div>
                 <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 <span>Error! {error}</span>
             </div>
         </div>}
+
+        <button className="btn btn-primary btn-sm" onClick={() => swapBatsman()}>Swap Batsman</button>
 
         <FairDelivery
             multiplier={multiplier}
