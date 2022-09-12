@@ -213,6 +213,7 @@ const ScoringTabComponent = ({ match, setMatch, innings, setInnings }: PropsForS
             </ul>
         </div>
 
+        <button className="btn btn-primary btn-sm" onClick={() => swapBatsman()}>Swap Batsman</button>
         <div className="border border-base-300 rounded-box p-2 mb-2">
 
             <div>Over:</div>
@@ -231,19 +232,18 @@ const ScoringTabComponent = ({ match, setMatch, innings, setInnings }: PropsForS
             </div>
         </div>}
 
-        <button className="btn btn-primary btn-sm" onClick={() => swapBatsman()}>Swap Batsman</button>
 
-        <FairDelivery
-            multiplier={multiplier}
-            setMultiplier={setMultiplier}
-            handleBall={handleBall}
-        />
         <ExtrasComponent
             extra={extra}
             setExtra={setExtra}
             handleBall={handleBall}
         />
         <WicketComponent handleBall={handleBall} />
+        <FairDelivery
+            multiplier={multiplier}
+            setMultiplier={setMultiplier}
+            handleBall={handleBall}
+        />
         <footer className="mt-5">
             <button className="btn btn-error m-1" onClick={handleEndOver}>
                 End Over

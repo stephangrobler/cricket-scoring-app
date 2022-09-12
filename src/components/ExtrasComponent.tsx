@@ -13,6 +13,14 @@ const ExtrasComponent = ({ extra, setExtra, handleBall }) => {
       <h2>Extras</h2>
       <div className="mb-2">
         <button
+          className={getClass('FAIR')}
+          onClick={() => {
+            setExtra('FAIR');
+          }}
+        >
+          FAIR
+        </button>
+        <button
           className={getClass('WIDE')}
           onClick={() => {
             setExtra('WIDE');

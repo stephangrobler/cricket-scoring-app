@@ -28,6 +28,16 @@ export class Supabase {
             .from('players')
             .insert([
                 { name: 'Test Player 1',  },
-            ])
+            ]);
+    }
+
+    async saveMatchData(key: string, matchData: string | null) {
+        
+        const { data, error } = await this.supabase
+        .from('matches_json')
+        .insert([
+            { key, data: matchData },
+        ]);
+
     }
 }
