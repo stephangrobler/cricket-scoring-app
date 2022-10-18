@@ -208,8 +208,8 @@ const ScoringTabComponent = ({ match, setMatch, innings, setInnings }: PropsForS
         <div className="border border-base-300 rounded-box p-2 mb-2">
 
             <ul>
-                <li>{batsman1} - {getBatsmenScore(batsman1)} {facing === 1 ? <span>*</span> : null} </li>
-                <li>{batsman2} - {getBatsmenScore(batsman2)} {facing === 2 ? <span>*</span> : null}</li>
+                <li className="flex"><div className="flex-auto">{batsman1} {facing === 1 ? <span>*</span> : null}</div><div>{getBatsmenScore(batsman1)}</div>  </li>
+                <li className="flex"><div className="flex-auto">{batsman2} {facing === 2 ? <span>*</span> : null}</div><div>{getBatsmenScore(batsman2)}</div> </li>
             </ul>
         </div>
 
