@@ -1,11 +1,13 @@
+import classNames from 'classnames';
 import * as React from 'react';
 
 // @ts-ignore
 const ExtrasComponent = ({ extra, setExtra, handleBall }) => {
   // @ts-ignore
   const getClass = (extraType) => {
-    let classes = 'btn btn-primary btn-sm m-1';
-    return extraType === extra ? `${classes} btn-accent` : classes;    
+    //let classes = 'btn btn-primary btn-sm m-1';
+    //return extraType === extra ? `${classes} btn-accent` : classes;   
+    return classNames('btn btn-sm m-1', {'btn-primary': extra !== extraType}, {'btn-accent': extra === extraType})
   };
 
   return (
@@ -13,7 +15,7 @@ const ExtrasComponent = ({ extra, setExtra, handleBall }) => {
       <h2>Extras</h2>
       <div className="mb-2">
         <button
-          className={getClass('FAIR')}
+          className={getClass("FAIR")}
           onClick={() => {
             setExtra('FAIR');
           }}
