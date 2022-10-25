@@ -1,0 +1,6 @@
+.login-wrapper{
+    display: flex;
+    align-content: center;
+    height: 100vh;
+    flex-direction: column;
+}
