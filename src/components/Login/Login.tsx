@@ -1,17 +1,32 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuth } from '../../contexts/AuthProvider';
 import './Login.css';
+import { Navigate } from 'react-router-dom';
+import { supabase } from '../../api/supabaseClient';
 
-// @ts-ignore
+
+
 export default function Login() {    
-    const { onLogin } = useAuth();
+    const auth = useAuth();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
-        await onLogin({email, password});
+        await auth.onLogin({email, password});
     };
+
+
+    useEffect(() => {
+        console.log('LOGIN:', supabase.auth.user());
+        if (supabase.auth.user() !== null) {
+            console.log('redirecting');
+            <Navigate to="/app" replace />
+        }
+    });
+
+
+
     return (
         <div className="login-wrapper container mx-auto">
             <div className="columns-1 p-3">

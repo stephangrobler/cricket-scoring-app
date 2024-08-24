@@ -23,6 +23,7 @@ export class Supabase {
     }    
     
     async getPlayers() {
+
         const { data, error } = await this.supabase.from('players').select(`
         *,
         groups (

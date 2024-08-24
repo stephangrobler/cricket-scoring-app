@@ -1,10 +1,12 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Supabase } from '../api/supabase';
+import { Session, User } from '@supabase/supabase-js';
+import { supabase } from '../api/supabaseClient';
 
 
 export interface IAuthProvider {
-    token: null;
+    session: Session | null;
+    user: User | null | undefined;
     onLogin: (arg0: { email: string; password: string }) => Promise<void>;
     onLogout: () => void;
     checkAuth: () => Promise<any>;
@@ -13,42 +15,50 @@ const AuthContext = createContext<IAuthProvider | null>(null);
 
 // @ts-ignore
 const AuthProvider = ({ children }) => {
-    const [token, setToken] = useState(null);
-    const navigate = useNavigate();
-    
+    const [user, setUser] = useState<User | null | undefined>(null);
+    const [session, setSession] = useState<Session | null>(null);
+    const navigate = useNavigate(); 
+
     useEffect(() => {
-        const loggedInUser = localStorage.getItem("user");
-        if (loggedInUser) {
-            const foundUser = JSON.parse(loggedInUser);
-            setToken(foundUser);
-        }
-    }, []);
+        const session = supabase.auth.session();
+        setSession(session);
     
+        supabase.auth.onAuthStateChange((_event, session) => {
+          setSession(session);
+        });
+    }, []);
+
+
     const handleLogin = async (arg0: { email: string; password: string }) => {
-        //   const token = await fakeAuth();
-        const base = new Supabase();
-        const response = await base.signInWithPassword({ email: arg0.email, password: arg0.password });
-        localStorage.setItem('user', JSON.stringify(response));
-        console.log(response);
-        setToken(response);
-        navigate('/app');
+        
+        const response = await supabase.auth.signIn({ email: arg0.email, password: arg0.password });
+        if (!response.error){
+            localStorage.setItem('session', JSON.stringify(response));
+            setSession(response.session);
+            navigate('/app');
+        } else {
+            console.log(response);
+            alert(response.error.message);
+        }
     };
 
     const handleLogout = () => {
-        setToken(null);
+        setSession(null);
     };
 
     const checkAuth = async () => {
+         
         const loggedInUser = localStorage.getItem("user");
         if (loggedInUser) {
             const foundUser = JSON.parse(loggedInUser);
-            setToken(foundUser);
+            setSession(foundUser);
         }
-        return token
+        return session
     };   
 
     const value: IAuthProvider = {
-        token,
+        session,
+        user,
         onLogin: handleLogin,
         onLogout: handleLogout,
         checkAuth

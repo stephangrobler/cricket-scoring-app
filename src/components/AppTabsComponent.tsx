@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import {  useState } from 'react';
+
 import { getCurrentInnings, getCurrentMatch, persistInnings, persistMatch } from '../api/matchData';
 import { useAuth } from '../contexts/AuthProvider';
 import MatchComponent from './MatchComponent';
@@ -7,7 +7,7 @@ import ScoreCardTabComponent from './ScoreCardTabComponent';
 import ScoringTabComponent from './ScoringTabComponent';
 
 const AppTabsComponent = () => {
-    const { onLogout } = useAuth();   
+    
 
     const matchData = getCurrentMatch();
     const inningData = getCurrentInnings(matchData.id);
@@ -46,7 +46,7 @@ const AppTabsComponent = () => {
     };
 
     return (
-        <div className="container mx-auto h-screen">
+        <div className="container mx-auto h-screen">            
             <div className="tabs tabs-boxed">
                 <div
                     className={activeTab === 'MatchSettings' ? 'tab tab-active flex-1' : 'tab flex-1'}
@@ -62,11 +62,6 @@ const AppTabsComponent = () => {
                     className={activeTab === 'ScoreCard' ? 'tab tab-active flex-1' : 'tab flex-1'}
                     onClick={() => setActiveTab('ScoreCard')}>
                     Score Cards
-                </div>
-                <div className="flex-1">
-                    <button className="btn btn-small" onClick={onLogout}>
-                        Log Out
-                    </button>
                 </div>
             </div>
 

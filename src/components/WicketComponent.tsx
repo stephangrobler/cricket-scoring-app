@@ -1,5 +1,10 @@
 import * as React from 'react';
 
+
+
+
+type OUTS = "CAUGHT";
+
 // @ts-ignore
 const WicketComponent = ({ handleBall }) => {
   return <div>
