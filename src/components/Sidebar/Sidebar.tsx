@@ -8,6 +8,7 @@ import AppTabsComponent from '../AppTabsComponent';
 import { BiCricketBall } from "react-icons/bi";
 import { Session } from '@supabase/supabase-js';
 import { useAuth } from '../../contexts/AuthProvider';
+import Home from '../Home/Home';
 
 interface SidebarProps {
   session?: Session | null;
@@ -40,7 +41,11 @@ const Sidebar: FC<SidebarProps> = () => {
               </svg>
             </label>
           </div>
-          <div className="mx-2 flex-1 px-2"><BiCricketBall />Crickety</div>
+          <div className="mx-2 flex-1 px-2">
+            <a href="/">
+            <div><BiCricketBall />&nbsp;Crickety</div>
+            </a>
+          </div>
           <div className="hidden flex-none lg:block">
             <ul className="menu menu-horizontal">
               {/* Navbar menu content here */}
@@ -59,7 +64,7 @@ const Sidebar: FC<SidebarProps> = () => {
                 <ProtectedRoute >
                   <AppTabsComponent />
                 </ProtectedRoute>} />
-            
+            <Route path="/" element={<Home />} />
         </Routes>
       </div>
       <div className="drawer-side">
